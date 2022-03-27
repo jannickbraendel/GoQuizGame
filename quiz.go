@@ -9,27 +9,29 @@ import (
 	"os"
 )
 
-var questions = []string{}
-var answers = []string{}
 var rightAnswersCount = 0
+
+type problem struct {
+	question string
+	answer   string
+}
+
+var problems = []problem{}
 
 func main() {
 	getQuizData()
 
-	for i, val := range questions {
-		fmt.Printf(val + ":")
+	for _, p := range problems {
+		fmt.Printf("%s:\n", p.question)
 		var ans string
-		fmt.Scanf("%s", &ans)
-		if ans == answers[i] {
+		fmt.Scanf("%s\n", &ans)
+		if ans == p.answer {
 			//correct answer
 			rightAnswersCount++
-			fmt.Printf("Correct Answer! Let's go next..\n")
-		} else {
-			fmt.Printf("Wrong Answer.. Next one will be better.\n")
 		}
 	}
 
-	fmt.Printf("You have answered all the questions. You had ", rightAnswersCount, " out of ", len(questions), " correct. Congratulations!")
+	fmt.Printf("You have answered all the questions. You had %d out of %d correct. Congratulations!", rightAnswersCount, len(problems))
 }
 
 func getQuizData() {
@@ -53,8 +55,7 @@ func getQuizData() {
 			log.Fatal(err)
 		}
 
-		questions = append(questions, line[0])
-		answers = append(answers, line[1])
+		problems = append(problems, problem{question: line[0], answer: line[1]})
 	}
 
 }
